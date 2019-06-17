@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Who is Spy</string>
+    <string name="playerName"></string>
+    <string name="clickHint1">雙擊螢幕確認謎底</string>
+    <string name="clickHint2">雙擊螢幕換下一位玩家</string>
+    <string name="riddleHint">你的謎底是</string>
+    <string name="riddleCivilian">雙擊螢幕開始遊戲</string>
+    <string name="riddleSpy">哼哼</string>
+</resources>
