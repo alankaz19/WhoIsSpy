@@ -26,13 +26,16 @@
             android:text="平民"
             android:textColor="#81D4FA" />
 
-        <EditText
-            android:id="@+id/ed_riddle1"
+        <TextView
+            android:id="@+id/tv_riddle1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:textColor="#FFEBEE" />
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0"
+            android:text="TextView"
+            android:textColor="#81D4FA"
+            android:textSize="18sp" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -42,7 +45,7 @@
         android:layout_marginBottom="20dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/btn_set"
+        app:layout_constraintBottom_toTopOf="@id/btn_exit"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
         tools:layout_editor_absoluteX="0dp">
 
@@ -54,13 +57,16 @@
             android:text="臥底"
             android:textColor="#DF5A5A" />
 
-        <EditText
-            android:id="@+id/ed_riddle2"
+        <TextView
+            android:id="@+id/tv_riddle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:textColor="#FFEBEE" />
+            android:layout_marginLeft="10dp"
+            android:layout_weight="0"
+            android:text="TextView"
+            android:textColor="#DF5A5A"
+            android:textSize="18sp" />
+
     </LinearLayout>
 
     <TextView
@@ -69,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="8dp"
-        android:text="自訂遊戲謎底"
+        android:text="遊戲謎底"
         android:textColor="#F5F0F1"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -79,13 +85,13 @@
         app:layout_constraintVertical_bias="0.571" />
 
     <Button
-        android:id="@+id/btn_set"
+        android:id="@+id/btn_exit"
         android:layout_width="134dp"
         android:layout_height="45dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/button_back"
-        android:text="設定完成"
+        android:text="退出"
         android:textColor="#FFEBEE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

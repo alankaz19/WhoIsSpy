@@ -29,10 +29,13 @@ public class GameActivity extends AppCompatActivity {
     private int playerCount;
     private boolean showRiddle;
 
-    private Player[] players;
+    public static Player[] players;
+    public static String[] playerNames;
     private String[] currentRiddle;
 
     private boolean hasCustomRiddle;
+
+    private Bundle bundle;
 
 
     @Override
@@ -43,7 +46,8 @@ public class GameActivity extends AppCompatActivity {
         initView();
 
         //接收MainActivity傳來的資料  設定謎語
-        Bundle bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();
+
 
         if(bundle != null) {
            final String[] custom_riddles = bundle.getStringArray("RIDDLE");
@@ -58,8 +62,12 @@ public class GameActivity extends AppCompatActivity {
 
         //取得玩家資料
         players = MainActivity.playerGenerator.getPlayers();
+        playerNames = MainActivity.playerGenerator.getPlayerNames();
 
-        //
+        //第一位玩家點擊畫面
+        playerName.setText( players[playerCount].getName());
+        clickHint.setText(R.string.clickHint1);
+        llRiddle.setVisibility(View.GONE);
 
         //實現畫面雙擊
         LinearLayout llGame = findViewById(R.id.ll_game);
@@ -73,8 +81,6 @@ public class GameActivity extends AppCompatActivity {
             @Override
             public void onDoubleClick(View view) {
 
-
-
                 clickCount++;
                 if(clickCount % 2 == 1) {
                     showRiddle = true;
@@ -86,6 +92,7 @@ public class GameActivity extends AppCompatActivity {
                 if(playerCount  +1 == players.length+1 ) {
                     //跳轉頁面
                     Intent intent = new Intent(GameActivity.this,VoteActivity.class);
+                    intent.putExtras(bundle);
                     startActivity(intent);
 
                 }else{
@@ -124,6 +131,7 @@ public class GameActivity extends AppCompatActivity {
             if(players[playerCount].getIdentity() == "spy"){
                 riddle.setText(currentRiddle[0]);
                 riddleHint.setText(R.string.riddleHint);
+                riddleHint.setTextColor(Color.parseColor("#81D4FA"));
                 riddle.setTextColor(Color.parseColor("#FFFFFF"));
             }else if(players[playerCount].getIdentity()== "whiteBoard"){
                 riddleHint.setText("哈哈你是白板");
@@ -133,6 +141,7 @@ public class GameActivity extends AppCompatActivity {
                 riddle.setText(currentRiddle[1]);
                 riddleHint.setText(R.string.riddleHint);
                 riddle.setTextColor(Color.parseColor("#FFFFFF"));
+                riddleHint.setTextColor(Color.parseColor("#81D4FA"));
             }
         }else{
             llRiddle.setVisibility(View.GONE);

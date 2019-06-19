@@ -1,12 +1,10 @@
 package com.example.spy;
 
-import android.util.Log;
 
 public class PlayerGenerator {
     private int playerNum;
     private int spyNum;
     private int whiteBoardNum;
-
 
     private Player[] players;
     private String[] playerNames;
@@ -18,6 +16,7 @@ public class PlayerGenerator {
         this.whiteBoardNum = whiteBoardNum;
 
         players = new Player[playerNum];
+        playerNames = new String[playerNum];
         generatePlayerData();
         randomIdentity(players);
     }
@@ -27,7 +26,8 @@ public class PlayerGenerator {
         this.spyNum = spyNum;
         this.whiteBoardNum = whiteBoardNum;
 
-        players = new Player[playerNum];
+        this.players = new Player[playerNum];
+        this.playerNames = playerNames;
         generatePlayerData(playerNames);
         randomIdentity(players);
     }
@@ -43,6 +43,9 @@ public class PlayerGenerator {
     }
 
     public String[] getPlayerNames() {
+        for(int i = 0; i < players.length ; i++) {
+            this.playerNames[i] = players[i].getName();
+        }
         return this.playerNames;
     }
 
@@ -60,18 +63,17 @@ public class PlayerGenerator {
     }
 
     private void randomIdentity(Player[] players) {
+        int tempSpyNum = spyNum;
+        int tempWhiteBoardNum = whiteBoardNum;
         for(int i  = 0; i < players.length ; i++) {
             this.players[i].setIdentity("civilian");
-            if(spyNum > 0) {
-                spyNum--;
+            if (tempSpyNum > 0) {
+                tempSpyNum--;
                 this.players[i].setIdentity("spy");
-            }else if(whiteBoardNum > 0){
-                whiteBoardNum--;
+            } else if (tempWhiteBoardNum > 0) {
+                tempWhiteBoardNum--;
                 this.players[i].setIdentity("whiteBoard");
             }
-
-
-
         }
 
         for(int j = 0; j < players.length ; j++) {
@@ -79,8 +81,17 @@ public class PlayerGenerator {
             swapIdentity(players,j,random);
         }
 
-
     }
 
+    public int getPlayerNum() {
+        return playerNum;
+    }
 
+    public int getSpyNum() {
+        return spyNum;
+    }
+
+    public int getWhiteBoardNum() {
+        return whiteBoardNum;
+    }
 }

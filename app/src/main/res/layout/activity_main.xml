@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="110dp"
         android:layout_marginBottom="30dp"
         android:shadowColor="#EC9E27"
         android:text="誰是臥底"
@@ -136,6 +136,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
@@ -185,6 +186,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp"
         android:gravity="center_horizontal"
         android:orientation="horizontal">
@@ -210,6 +212,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="20dp"
         android:layout_weight="0"
         android:gravity="center_horizontal"
@@ -238,6 +241,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
         android:background="@drawable/button_back"
         android:paddingLeft="50dp"
         android:paddingRight="50dp"

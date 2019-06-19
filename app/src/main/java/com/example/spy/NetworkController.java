@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.widget.Toast;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -28,52 +30,83 @@ public class NetworkController {
     public abstract static class NetworkControllerCallback implements Callback {
         public abstract void onSuccess(JSONObject responseJson);
         public abstract void onFailure(String errMsg);
+        public abstract void onComplete();
 
+        private boolean showToast;
         private Handler mainThreadHandler;
         private Dialog loadingDialog;
+        private Context context;
 
-        public NetworkControllerCallback() {
+
+
+        public NetworkControllerCallback(Context context) {
+            this.context = context;
             mainThreadHandler = new Handler(Looper.getMainLooper());
+            showToast = false;
         }
 
-        public NetworkControllerCallback enableLoadingDialog(Context context) {
-            loadingDialog = new Dialog(context, R.style.FullScreenDialog);
+        public NetworkControllerCallback enableLoadingDialog() {
+
+            loadingDialog = new Dialog(context,R.style.SpinKitView);
             loadingDialog.setCancelable(false);
             loadingDialog.setContentView(LayoutInflater.from(context).inflate(R.layout.dialog_loading, null));
             loadingDialog.show();
             return this;
         }
 
+        public NetworkControllerCallback showErrorToast() {
+            showToast = true;
+            return this;
+        }
+
         @Override
-        public void onResponse(Call call, Response response) {
-            try {
-                JSONObject responseJsonObj = new JSONObject(response.body().string());
+        public void onResponse(Call call,final Response response) {
+            mainThreadHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        JSONObject responseJsonObj = new JSONObject(response.body().string());
 
-                if (responseJsonObj.getInt("status") != -1) {
-                    NetworkControllerCallback.this.onFailure(responseJsonObj.getString("msg"));
-                } else {
-                    NetworkControllerCallback.this.onSuccess(responseJsonObj);
+                        if (responseJsonObj.getInt("status") != -1) {
+                            NetworkControllerCallback.this.onFailure(responseJsonObj.getString("msg"));
+                            if(showToast) {
+                                Toast.makeText(context, responseJsonObj.getString("msg"), Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            NetworkControllerCallback.this.onSuccess(responseJsonObj);
+                        }
+                        onCompleted();
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
+            });
 
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
 
         @Override
         public void onFailure(Call call,final IOException e) {
             NetworkControllerCallback.this.onFailure(e.getMessage());
-
             mainThreadHandler.post(new Runnable() {
                 @Override
                 public void run() {
                     Log.d(TAG, e.getMessage());
                     NetworkControllerCallback.this.onFailure(e.getMessage());
-                    onComplete();
+                    if(showToast) {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                    onCompleted();
                 }
             });
+        }
+
+        private void onCompleted() {
+            if(loadingDialog != null) {
+                loadingDialog.dismiss();
+            }
         }
     }
 
@@ -119,7 +152,7 @@ public class NetworkController {
     //API
     public void postRiddle (NetworkControllerCallback callback) {
         FormBody formBody = new FormBody.Builder()
-                .add("command" , "getRiddle")
+                .add("command" , "getPuzzle")
                 .build();
         Request request =  new Request.Builder()
                 .url(API_ROOT)
