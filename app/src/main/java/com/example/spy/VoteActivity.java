@@ -90,6 +90,9 @@ public class VoteActivity extends AppCompatActivity {
         RvAdapter adapter = new RvAdapter(players);
         rv.setAdapter(adapter);
         rv.setLayoutManager(layoutManager);
+
+        int firstPosition = ((GridLayoutManager) layoutManager).findFirstVisibleItemPosition();
+        int lastPosition = ((GridLayoutManager) layoutManager).findLastVisibleItemPosition();
     }
 
     public class RvAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
@@ -115,7 +118,9 @@ public class VoteActivity extends AppCompatActivity {
                 llItem.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        voteHint.setText("確定要殺死 " + names[getLayoutPosition()] +" 嗎？");
+
+
+                        voteHint.setText("確定要殺死 " + names[getAdapterPosition ()] +" 嗎？");
                         dialog.show();
 
                         //取消殺人
@@ -130,21 +135,21 @@ public class VoteActivity extends AppCompatActivity {
                         kill.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                players[getLayoutPosition()].setDead(true);
+                                players[getAdapterPosition ()].setDead(true);
                                 if(players[getLayoutPosition()].getIdentity().equals("spy")){
-                                    TextViewHolder.this.player.setText(playerNames[getLayoutPosition()]  + "\n\n" + "臥底");
+                                    TextViewHolder.this.player.setText(playerNames[getAdapterPosition ()]  + "\n" + "臥底");
                                     TextViewHolder.this.player.setTextColor(Color.parseColor("#DF5A5A"));
-                                    TextViewHolder.this.player.setEnabled(false);
+                                    llItem.setEnabled(false);
                                     spyNum--;
                                 }else if(players[getLayoutPosition()].getIdentity().equals("whiteBoard")) {
-                                    TextViewHolder.this.player.setText(playerNames[getLayoutPosition()]  + "\n\n" + "QQ 白板");
+                                    TextViewHolder.this.player.setText(playerNames[getAdapterPosition ()]  + "\n" + "QQ 白板");
                                     TextViewHolder.this.player.setTextColor(Color.parseColor("#318EFD"));
-                                    TextViewHolder.this.player.setEnabled(false);
+                                    llItem.setEnabled(false);
                                     whiteBoardNum--;
                                 }else{
-                                    TextViewHolder.this.player.setText(playerNames[getLayoutPosition()]  + "\n\n" + "平民");
+                                    TextViewHolder.this.player.setText(playerNames[getAdapterPosition ()]  + "\n" + "平民");
                                     TextViewHolder.this.player.setTextColor(Color.parseColor("#81D4FA"));
-                                    TextViewHolder.this.player.setEnabled(false);
+                                    llItem.setEnabled(false);
                                     civilianNum--;
                                 }
 
@@ -160,7 +165,6 @@ public class VoteActivity extends AppCompatActivity {
                                     banner.setTextColor(Color.parseColor("#DF5A5A"));
                                     btnRiddle.setVisibility(View.VISIBLE);
                                 }
-
                                 dialog.dismiss();
                             }
                         });
@@ -189,7 +193,21 @@ public class VoteActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
             if(viewHolder instanceof TextViewHolder) {
-                ((TextViewHolder)viewHolder).player.setText(players[i].getName());
+                ((TextViewHolder)viewHolder).setIsRecyclable(false);
+                if(!players[i].isDead()){
+                    ((TextViewHolder)viewHolder).player.setText(players[i].getName());
+                    return;
+                }
+                if(players[i].getIdentity().equals("spy")) {
+                    ((TextViewHolder)viewHolder).player.setText(playerNames[i]  + "\n" + "臥底");
+                    ((TextViewHolder)viewHolder).player.setTextColor(Color.parseColor("#DF5A5A"));
+                }else if(players[i].getIdentity().equals("whiteBoard")){
+                    ((TextViewHolder)viewHolder).player.setText(playerNames[i]  + "\n" + "QQ 白板");
+                    ((TextViewHolder)viewHolder).player.setTextColor(Color.parseColor("#318EFD"));
+                }else{
+                    ((TextViewHolder)viewHolder).player.setText(playerNames[i]  + "\n" + "平民");
+                    ((TextViewHolder)viewHolder).player.setTextColor(Color.parseColor("#81D4FA"));
+                }
             }
         }
 
